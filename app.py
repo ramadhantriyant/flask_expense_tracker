@@ -128,7 +128,7 @@ def new_expense():
         print(get_flashed_messages())
 
         # return redirect(url_for("new_expense"))
-        return render_template("new_expense.html.j2", form=form)
+        return redirect(url_for("index_page"))
 
     return render_template(
         "new_expense.html.j2",
