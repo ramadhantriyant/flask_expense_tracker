@@ -9,19 +9,7 @@ from flask import (
     request
 )
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm
-from wtforms import (
-    StringField,
-    TextField,
-    TextAreaField,
-    IntegerField,
-    DateField,
-    SelectField,
-    PasswordField,
-    BooleanField,
-    SubmitField
-)
-from wtforms.validators import DataRequired
+from forms import LoginForm, ExpenseForm, CategoryForm
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -70,44 +58,14 @@ class Expenses(db.Model):
     amount = db.Column(db.Integer)
     category_id = db.Column(db.Integer, db.ForeignKey("categories.id"))
 
-    def __init__(self, date, expense_detail, amount, category_id):
+    def __init__(self, date, category_id, expense_detail, amount):
         self.date = date
+        self.category_id = category_id
         self.expense_detail = expense_detail
         self.amount = amount
-        self.category_id = category_id
 
     def __repr__(self):
         return f"Spent {amount} for {expdetail}"
-
-
-class LoginForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
-    remember_me = BooleanField("Remember Me")
-    submit = SubmitField("Sign In")
-
-
-class ExpenseForm(FlaskForm):
-    def list_of_categories():
-        categories = Categories.query.all()
-        return [(cat.id, cat.name) for cat in categories]
-
-    date = DateField("Date", validators=[DataRequired()])
-    expense_detail = StringField("Expense Detail", validators=[DataRequired()])
-    amount = IntegerField("Amount", validators=[DataRequired()])
-    categories = SelectField(
-        u"Categories",
-        validators=[DataRequired()],
-        choices=list_of_categories()
-    )
-    submit = SubmitField("Submit Expense")
-
-
-
-class CategoryForm(FlaskForm):
-    name = StringField("New Category", validators=[DataRequired()])
-    description = TextAreaField("Description")
-    submit = SubmitField("Submit New Category")
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -133,7 +91,6 @@ def index_page():
 
 @app.route("/dashboard", methods=['GET'])
 def dashboard():
-    #print(session)
     return render_template(
         "dashboard.html.j2"
     )
@@ -141,23 +98,54 @@ def dashboard():
 
 @app.route("/expenses")
 def expenses():
+    data = db.session.query(Expenses, Categories).join(Categories).all()
     return render_template(
-        "expenses.html.j2"
+        "expenses.html.j2",
+        data=data
     )
 
 @app.route("/new_expense", methods=['GET', 'POST'])
 def new_expense():
-    form = ExpenseForm()
+    categories = Categories.query.all()
+    form = ExpenseForm(obj=categories)
+    form.category_id.choices = [(cat.id, cat.name) for cat in categories]
 
-    if form.validate_on_submit():
-        flash("Success")
+    if form.validate_on_submit() and request.method == "POST":
+        date = form.date.data
+        category_id = form.category_id.data
+        expense_detail = form.expense_detail.data
+        amount = form.amount.data
 
-        return redirect(url_for("expenses"))
+        expense = Expenses(date, category_id, expense_detail, amount)
+
+        db.session.add(expense)
+        db.session.commit()
+
+        flash("New expense was addess successfully")
+
+        return redirect(url_for("new_expense"))
 
     return render_template(
         "new_expense.html.j2",
         form=form
     )
+
+
+@app.route("/expense/edit/<int:id>")
+def edit_expense(id):
+    return render_template(
+        "expenses.html.j2"
+    )
+
+
+@app.route("/expense/delete/<int:id>")
+def delete_expense(id):
+    expense = Expenses.query.get(id)
+
+    db.session.delete(expense)
+    db.session.commit()
+
+    return redirect(url_for("expenses"))
 
 
 @app.route("/categories")
@@ -176,10 +164,14 @@ def new_category():
     if form.validate_on_submit() and request.method == "POST":
         name = form.name.data
         description = form.description.data
+
         category = Categories(name, description)
+
         db.session.add(category)
         db.session.commit()
-        flash("Success")
+
+        flash("New category was added successfully!")
+
         return redirect(url_for("new_category"))
 
     return render_template(
@@ -195,8 +187,10 @@ def edit_category(id):
     if form.validate_on_submit() and request.method == "POST":
         name = form.name.data
         description = form.description.data
+
         category = Categories(name, description)
-        db.session.add(category)
+
+        db.session.update(category)
         db.session.commit()
         return redirect(url_for("categories"))
 
@@ -209,8 +203,10 @@ def edit_category(id):
 @app.route("/category/delete/<int:id>")
 def delete_category(id):
     category = Categories.query.get(id)
+
     db.session.delete(category)
     db.session.commit()
+
     return redirect(url_for("categories"))
 
 

@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import (
     StringField,
+    TextField,
+    TextAreaField,
     IntegerField,
     DateField,
     SelectField,
@@ -8,6 +10,7 @@ from wtforms import (
     BooleanField,
     SubmitField
 )
+from wtforms.validators import DataRequired
 
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
@@ -18,15 +21,16 @@ class LoginForm(FlaskForm):
 
 class ExpenseForm(FlaskForm):
     date = DateField("Date", validators=[DataRequired()])
-    expdetail = StringField("Expense Detail", validators=[DataRequired()])
+    expense_detail = StringField("Expense Detail", validators=[DataRequired()])
     amount = IntegerField("Amount", validators=[DataRequired()])
-    categories = SelectField(
+    category_id = SelectField(
         u"Categories",
         validators=[DataRequired()],
-        choices=[
-            ("Food & Beverages", "Food & Beverages"),
-            ("Transportation", "Transportation"),
-            ("Groceries", "Groceries")
-        ]
+        coerce=int
     )
     submit = SubmitField("Submit Expense")
+
+class CategoryForm(FlaskForm):
+    name = StringField("New Category", validators=[DataRequired()])
+    description = TextAreaField("Description")
+    submit = SubmitField("Submit New Category")

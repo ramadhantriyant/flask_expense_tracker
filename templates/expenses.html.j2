@@ -18,48 +18,15 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>08 October 2020</td>
-        <td>Dinner</td>
-        <td>Food & Beverages</td>
-        <td>Rp25500</td>
-        <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Delete</a></td>
-      </tr>
-      <tr>
-        <td>08 October 2020</td>
-        <td>Taxi from Summarecon to Home</td>
-        <td>Transportation</td>
-        <td>Rp45000</td>
-        <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Delete</a></td>
-      </tr>
-      <tr>
-        <td>08 October 2020</td>
-        <td>Lunch</td>
-        <td>Food & Beverages</td>
-        <td>Rp142900</td>
-        <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Delete</a></td>
-      </tr>
-      <tr>
-        <td>08 October 2020</td>
-        <td>Taxi from Home to Summarecon</td>
-        <td>Transportation</td>
-        <td>Rp25500</td>
-        <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Delete</a></td>
-      </tr>
-      <tr>
-        <td>07 October 2020</td>
-        <td>Drinking water</td>
-        <td>Groceries</td>
-        <td>Rp36000</td>
-        <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Delete</a></td>
-      </tr>
-      <tr>
-        <td>05 October 2020</td>
-        <td>Electricity</td>
-        <td>Utilities</td>
-        <td>Rp836000</td>
-        <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Delete</a></td>
-      </tr>
+      {% for expense, categories in data %}
+        <tr>
+          <td>{{ expense.date }}</td>
+          <td>{{ expense.expense_detail}}</td>
+          <td>{{ expense.categories.name }}</td>
+          <td>Rp{{ expense.amount }}</td>
+          <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="/expense/delete/{{ expense.id }}" class="btn btn-danger btn-sm active" role="button" aria-pressed="true">Delete</a></td>
+        </tr>
+      {% endfor %}
     </tbody>
   </table>
 

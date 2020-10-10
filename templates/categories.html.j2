@@ -19,7 +19,7 @@
         <tr>
           <td>{{ category.name }}</td>
           <td>{{ category.description }}</td>
-          <td><a href="/category/edit/{{ category.id }}" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="/category/delete/{{ category.id }}" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Delete</a></td>
+          <td><a href="/category/edit/{{ category.id }}" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="/category/delete/{{ category.id }}" class="btn btn-danger btn-sm active" role="button" aria-pressed="true">Delete</a></td>
         </tr>
       {% endfor %}
     </tbody>
