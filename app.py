@@ -5,13 +5,15 @@ from flask import (
     session,
     redirect,
     url_for,
-    flash
+    flash,
+    request
 )
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import (
     StringField,
     TextField,
+    TextAreaField,
     IntegerField,
     DateField,
     SelectField,
@@ -86,24 +88,25 @@ class LoginForm(FlaskForm):
 
 
 class ExpenseForm(FlaskForm):
+    def list_of_categories():
+        categories = Categories.query.all()
+        return [(cat.id, cat.name) for cat in categories]
+
     date = DateField("Date", validators=[DataRequired()])
     expense_detail = StringField("Expense Detail", validators=[DataRequired()])
     amount = IntegerField("Amount", validators=[DataRequired()])
     categories = SelectField(
         u"Categories",
         validators=[DataRequired()],
-        choices=[
-            ("fnb", "Food & Beverages"),
-            ("transport", "Transportation"),
-            ("groceries", "Groceries")
-        ]
+        choices=list_of_categories()
     )
     submit = SubmitField("Submit Expense")
 
 
+
 class CategoryForm(FlaskForm):
     name = StringField("New Category", validators=[DataRequired()])
-    description = StringField("Description")
+    description = TextAreaField("Description")
     submit = SubmitField("Submit New Category")
 
 
@@ -147,11 +150,6 @@ def new_expense():
     form = ExpenseForm()
 
     if form.validate_on_submit():
-        # session['date'] = form.date.data
-        # session['expdetail'] = form.expdetail.data
-        # session['amount'] = form.amount.data
-        # session['categories'] = form.categories.data
-
         flash("Success")
 
         return redirect(url_for("expenses"))
@@ -175,19 +173,45 @@ def categories():
 def new_category():
     form = CategoryForm()
 
-    if form.validate_on_submit():
+    if form.validate_on_submit() and request.method == "POST":
         name = form.name.data
         description = form.description.data
         category = Categories(name, description)
         db.session.add(category)
         db.session.commit()
         flash("Success")
-        return redirect(url_for("new_categories"))
+        return redirect(url_for("new_category"))
 
     return render_template(
         "new_category.html.j2",
         form=form
     )
+
+
+@app.route("/category/edit/<int:id>")
+def edit_category(id):
+    form = CategoryForm()
+
+    if form.validate_on_submit() and request.method == "POST":
+        name = form.name.data
+        description = form.description.data
+        category = Categories(name, description)
+        db.session.add(category)
+        db.session.commit()
+        return redirect(url_for("categories"))
+
+    return render_template(
+        "edit_category.html.j2",
+        form=form
+    )
+
+
+@app.route("/category/delete/<int:id>")
+def delete_category(id):
+    category = Categories.query.get(id)
+    db.session.delete(category)
+    db.session.commit()
+    return redirect(url_for("categories"))
 
 
 @app.route("/history")
