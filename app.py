@@ -11,6 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import (
     StringField,
+    TextField,
     IntegerField,
     DateField,
     SelectField,
@@ -45,18 +46,33 @@ class Users(db.Model):
         return f"Username {username} exist in database"
 
 
+class Categories(db.Model):
+    __tablename__ = "categories"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text)
+    description = db.Column(db.Text)
+    expense = db.relationship("Expenses", backref="categories", lazy="dynamic")
+
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+
+
 class Expenses(db.Model):
     __tablename__ = "expenses"
 
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
-    expdetail = db.Column(db.Text)
+    expense_detail = db.Column(db.Text)
     amount = db.Column(db.Integer)
+    category_id = db.Column(db.Integer, db.ForeignKey("categories.id"))
 
-    def __init__(self, date, expdetail, amount):
+    def __init__(self, date, expense_detail, amount, category_id):
         self.date = date
-        self.expdetail = expdetail
+        self.expense_detail = expense_detail
         self.amount = amount
+        self.category_id = category_id
 
     def __repr__(self):
         return f"Spent {amount} for {expdetail}"
@@ -71,7 +87,7 @@ class LoginForm(FlaskForm):
 
 class ExpenseForm(FlaskForm):
     date = DateField("Date", validators=[DataRequired()])
-    expdetail = StringField("Expense Detail", validators=[DataRequired()])
+    expense_detail = StringField("Expense Detail", validators=[DataRequired()])
     amount = IntegerField("Amount", validators=[DataRequired()])
     categories = SelectField(
         u"Categories",
@@ -83,6 +99,12 @@ class ExpenseForm(FlaskForm):
         ]
     )
     submit = SubmitField("Submit Expense")
+
+
+class CategoryForm(FlaskForm):
+    name = StringField("New Category", validators=[DataRequired()])
+    description = StringField("Description")
+    submit = SubmitField("Submit New Category")
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -114,6 +136,12 @@ def dashboard():
     )
 
 
+@app.route("/expenses")
+def expenses():
+    return render_template(
+        "expenses.html.j2"
+    )
+
 @app.route("/new_expense", methods=['GET', 'POST'])
 def new_expense():
     form = ExpenseForm()
@@ -124,11 +152,9 @@ def new_expense():
         # session['amount'] = form.amount.data
         # session['categories'] = form.categories.data
 
-        flash("Expense Saved Successfully")
-        print(get_flashed_messages())
+        flash("Success")
 
-        # return redirect(url_for("new_expense"))
-        return redirect(url_for("index_page"))
+        return redirect(url_for("expenses"))
 
     return render_template(
         "new_expense.html.j2",
@@ -136,9 +162,32 @@ def new_expense():
     )
 
 
-@app.route("/new_category")
+@app.route("/categories")
+def categories():
+    categories = Categories.query.all()
+    return render_template(
+        "categories.html.j2",
+        categories=categories
+    )
+
+
+@app.route("/new_category", methods=['GET', 'POST'])
 def new_category():
-    pass
+    form = CategoryForm()
+
+    if form.validate_on_submit():
+        name = form.name.data
+        description = form.description.data
+        category = Categories(name, description)
+        db.session.add(category)
+        db.session.commit()
+        flash("Success")
+        return redirect(url_for("new_categories"))
+
+    return render_template(
+        "new_category.html.j2",
+        form=form
+    )
 
 
 @app.route("/history")

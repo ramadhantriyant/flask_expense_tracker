@@ -1,9 +1,10 @@
-from app import db, Expenses, Users
+from app import db, Expenses, Users, Categories
 
 db.create_all()
 
-rama = Users("rama", "asdf")
-adel = Users("adel", "asdf")
+# groceries = Categories("Groceries", "Raw eggs, cooking oil, milk, etc")
+# transport = Categories("Transportation", "Taxi, gas, parking fee, toll fee")
+# fnb = Categories("Food & Beverages", "Breakfast, lunch, dinner")
 
-db.session.add_all([rama, adel])
+# db.session.add_all([transport, groceries, fnb])
 db.session.commit()

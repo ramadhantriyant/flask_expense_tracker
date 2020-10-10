@@ -1,0 +1,66 @@
+{% extends "base.html.j2" %}
+
+{% block content %}
+
+  <h1>Expenses for This Month</h1>
+
+  <a href={{ url_for('new_expense') }} class="btn btn-primary active" role="button" aria-pressed="true">New Expense</a>
+
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Expense Detail</th>
+        <th scope="col">Category</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>08 October 2020</td>
+        <td>Dinner</td>
+        <td>Food & Beverages</td>
+        <td>Rp25500</td>
+        <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Delete</a></td>
+      </tr>
+      <tr>
+        <td>08 October 2020</td>
+        <td>Taxi from Summarecon to Home</td>
+        <td>Transportation</td>
+        <td>Rp45000</td>
+        <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Delete</a></td>
+      </tr>
+      <tr>
+        <td>08 October 2020</td>
+        <td>Lunch</td>
+        <td>Food & Beverages</td>
+        <td>Rp142900</td>
+        <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Delete</a></td>
+      </tr>
+      <tr>
+        <td>08 October 2020</td>
+        <td>Taxi from Home to Summarecon</td>
+        <td>Transportation</td>
+        <td>Rp25500</td>
+        <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Delete</a></td>
+      </tr>
+      <tr>
+        <td>07 October 2020</td>
+        <td>Drinking water</td>
+        <td>Groceries</td>
+        <td>Rp36000</td>
+        <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Delete</a></td>
+      </tr>
+      <tr>
+        <td>05 October 2020</td>
+        <td>Electricity</td>
+        <td>Utilities</td>
+        <td>Rp836000</td>
+        <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Delete</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+{% endblock %}

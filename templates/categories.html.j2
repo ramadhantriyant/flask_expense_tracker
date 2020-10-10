@@ -1,0 +1,28 @@
+{% extends "base.html.j2" %}
+
+{% block content %}
+
+  <h1>Categories</h1>
+
+  <a href={{ url_for('new_category') }} class="btn btn-primary active" role="button" aria-pressed="true">New Category</a>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Category Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for category in categories %}
+        <tr>
+          <td>{{ category.name }}</td>
+          <td>{{ category.description }}</td>
+          <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Delete</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}
