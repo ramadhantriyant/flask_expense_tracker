@@ -19,6 +19,10 @@ class Expenses(db.Model):
     def __repr__(self):
         return f"Spent {amount} for {expdetail}"
 
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()

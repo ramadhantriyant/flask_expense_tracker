@@ -13,6 +13,10 @@ class Categories(db.Model):
         self.name = name
         self.description = description
 
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
