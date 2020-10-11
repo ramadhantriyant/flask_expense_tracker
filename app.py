@@ -8,8 +8,11 @@ from flask import (
     flash,
     request
 )
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 from forms import LoginForm, ExpenseForm, CategoryForm
+from models.categories import Categories
+from models.expenses import Expenses
+from models.users import Users
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -18,9 +21,9 @@ app.config['SECRET_KEY'] = "secret"
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + os.path.join(basedir, "data.sqlite")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
 
-
+'''
 class Users(db.Model):
     __tablename__ = "users"
 
@@ -66,7 +69,7 @@ class Expenses(db.Model):
 
     def __repr__(self):
         return f"Spent {amount} for {expdetail}"
-
+'''
 
 @app.route("/", methods=['GET', 'POST'])
 def index_page():
@@ -117,9 +120,7 @@ def new_expense():
         amount = form.amount.data
 
         expense = Expenses(date, category_id, expense_detail, amount)
-
-        db.session.add(expense)
-        db.session.commit()
+        expense.save_to_db()
 
         flash("New expense was addess successfully")
 
@@ -141,9 +142,7 @@ def edit_expense(id):
 @app.route("/expense/delete/<int:id>")
 def delete_expense(id):
     expense = Expenses.query.get(id)
-
-    db.session.delete(expense)
-    db.session.commit()
+    expense.delete_from_db()
 
     return redirect(url_for("expenses"))
 
@@ -166,9 +165,7 @@ def new_category():
         description = form.description.data
 
         category = Categories(name, description)
-
-        db.session.add(category)
-        db.session.commit()
+        category.save_to_db()
 
         flash("New category was added successfully!")
 
@@ -203,9 +200,7 @@ def edit_category(id):
 @app.route("/category/delete/<int:id>")
 def delete_category(id):
     category = Categories.query.get(id)
-
-    db.session.delete(category)
-    db.session.commit()
+    category.delete_from_db()
 
     return redirect(url_for("categories"))
 
@@ -225,4 +220,7 @@ def page_not_found(e):
 
 
 if __name__ == "__main__":
+    from db import db
+
+    db.init_app(app)
     app.run(port=80, debug=True)
