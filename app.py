@@ -30,12 +30,16 @@ def index_page():
     form = LoginForm()
 
     if form.validate_on_submit() and request.method == "POST":
-        #input = Users(form.username.data, form.password.data)
         user = Users.get_user(form.username.data)
 
-        if user.check_credentials(form.password.data) and user:
+        if user and user.check_credentials(form.password.data):
             login_user(user)
-            return redirect(url_for("dashboard"))
+            next = request.args.get("next")
+
+            if not is_safe_url(next):
+                return redirect(url_for(index_page))
+
+            return redirect(url_for(next))
 
         flash("Wrong Credentials!")
         return redirect(url_for("index_page"))

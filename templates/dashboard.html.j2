@@ -3,75 +3,74 @@
 {% block content %}
 
   <h1>Dashboard</h1>
+  <br>
   <div class="row">
     <div class="col">
-      <canvas id="myChart1"></canvas>
-      <script>
-        var ctx = document.getElementById("myChart1").getContext('2d');
-        var myChart1 = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-              label: '# of Votes',
-              data: [12, 19, 3, 23, 2, 3],
-              backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
-              ],
-              borderColor: [
-              'rgba(255,99,132,1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
-              ],
-              borderWidth: 1
-            }]
-          },
-          options: {
-            scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero:true
-                }
-              }]
-            }
-          }
-        });
-      </script>
+      <h3>Top 5 Expenses Category this Month</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Category</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Food & Beverages</td>
+            <td>Rp3672800</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Utilities</td>
+            <td>Rp2093300</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Groceries</td>
+            <td>Rp924600</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Unexpected Expenses</td>
+            <td>Rp550000</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Play</td>
+            <td>Rp396600</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="col">
-      <canvas id="myChart2"></canvas>
+      <h3>Total Expenses Last 6 Months</h3>
+      <canvas id="myChart"></canvas>
       <script type="text/javascript">
-        var ctx = document.getElementById('myChart2').getContext('2d');
+        var ctx = document.getElementById('myChart').getContext('2d');
         var myChart2 = new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: ['April 2020', 'May 2020', 'June 2020', 'July 2020', 'August 2020', 'September 2020'],
                 datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
+                    label: 'Total Expenses',
+                    data: [15000000, 13890000, 12998000, 14000000, 13200000, 13800000],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
                     ],
                     borderColor: [
-                        'rgba(255, 99, 132, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)'
                     ],
                     borderWidth: 1
                 }]
@@ -87,6 +86,14 @@
             }
         });
       </script>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h3>To be continued</h3>
+    </div>
+    <div class="col">
+      <h3>To be continued</h3>
     </div>
   </div>
 {% endblock %}
