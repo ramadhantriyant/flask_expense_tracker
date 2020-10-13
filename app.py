@@ -34,12 +34,7 @@ def index_page():
 
         if user and user.check_credentials(form.password.data):
             login_user(user)
-            next = request.args.get("next")
-
-            if not is_safe_url(next):
-                return redirect(url_for(index_page))
-
-            return redirect(url_for(next))
+            return redirect(url_for("dashboard"))
 
         flash("Wrong Credentials!")
         return redirect(url_for("index_page"))
@@ -120,6 +115,7 @@ def delete_expense(id):
 @login_required
 def categories():
     categories = Categories.find_all()
+    
     return render_template(
         "categories.html.j2",
         categories=categories
