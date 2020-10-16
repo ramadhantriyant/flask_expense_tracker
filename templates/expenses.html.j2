@@ -24,7 +24,14 @@
           <td>{{ expense.expense_detail}}</td>
           <td>{{ expense.categories.name }}</td>
           <td>Rp{{ expense.amount }}</td>
-          <td><a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Edit</a> <a href="/expense/delete/{{ expense.id }}" class="btn btn-danger btn-sm active" role="button" aria-pressed="true">Delete</a></td>
+          <td>
+            <a href="/expense/edit/{{ expense.id }}" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">
+              Edit
+            </a>
+            <a href="/expense/delete/{{ expense.id }}" class="btn btn-danger btn-sm active" role="button" aria-pressed="true">
+              Delete
+            </a>
+          </td>
         </tr>
       {% endfor %}
     </tbody>

@@ -12,7 +12,13 @@ from forms import LoginForm, ExpenseForm, CategoryForm
 from models.categories import Categories
 from models.expenses import Expenses
 from models.users import Users
-from login_manager import login_manager, login_user, login_required, logout_user
+from models.datas import Datas
+from login_manager import (
+    login_manager,
+    login_user,
+    login_required,
+    logout_user
+)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -30,7 +36,7 @@ def index_page():
     form = LoginForm()
 
     if form.validate_on_submit() and request.method == "POST":
-        user = Users.get_user(form.username.data)
+        user = Users.find_by_username(form.username.data)
 
         if user and user.check_credentials(form.password.data):
             login_user(user)
@@ -62,7 +68,8 @@ def dashboard():
 @app.route("/expenses")
 @login_required
 def expenses():
-    data = db.session.query(Expenses, Categories).join(Categories).all()
+    # data = db.session.query(Expenses, Categories).join(Categories).all()
+    data = Datas.join_expense_category()
     return render_template(
         "expenses.html.j2",
         data=data
@@ -71,7 +78,7 @@ def expenses():
 @app.route("/new_expense", methods=['GET', 'POST'])
 @login_required
 def new_expense():
-    categories = Categories.query.all()
+    categories = Categories.find_all()
     form = ExpenseForm(obj=categories)
     form.category_id.choices = [(cat.id, cat.name) for cat in categories]
 
@@ -94,18 +101,39 @@ def new_expense():
     )
 
 
-@app.route("/expense/edit/<int:id>")
+@app.route("/expense/edit/<int:id>", methods=['GET', 'POST'])
 @login_required
 def edit_expense(id):
+    expense = Expenses.find_by_id(id)
+
+    if not expense:
+        return render_template("404.html.j2")
+
+    categories = Categories.find_all()
+    form = ExpenseForm()
+    form.category_id.choices = [(cat.id, cat.name) for cat in categories]
+
+    if form.validate_on_submit() and request.method == "POST":
+        expense.date = form.date.data
+        expense.category_id = form.category_id.data
+        expense.expense_detail = form.expense_detail.data
+        expense.amount = form.amount.data
+
+        expense.save_to_db()
+
+        return redirect(url_for("expenses"))
+
     return render_template(
-        "expenses.html.j2"
+        "edit_expense.html.j2",
+        form=form,
+        expense=expense
     )
 
 
 @app.route("/expense/delete/<int:id>")
 @login_required
 def delete_expense(id):
-    expense = Expenses.query.get(id)
+    expense = Expenses.find_by_id(id)
     expense.delete_from_db()
 
     return redirect(url_for("expenses"))
@@ -115,7 +143,7 @@ def delete_expense(id):
 @login_required
 def categories():
     categories = Categories.find_all()
-    
+
     return render_template(
         "categories.html.j2",
         categories=categories
@@ -144,30 +172,34 @@ def new_category():
     )
 
 
-@app.route("/category/edit/<int:id>")
+@app.route("/category/edit/<int:id>", methods=['GET', 'POST'])
 @login_required
 def edit_category(id):
+    category = Categories.find_by_id(id)
+
+    if not category:
+        return render_template("404.html.j2")
+
     form = CategoryForm()
 
     if form.validate_on_submit() and request.method == "POST":
-        name = form.name.data
-        description = form.description.data
-
-        category = Categories(name, description)
+        category.name = form.name.data
+        category.description = form.description.data
         category.save_to_db()
 
         return redirect(url_for("categories"))
 
     return render_template(
         "edit_category.html.j2",
-        form=form
+        form=form,
+        category=category
     )
 
 
 @app.route("/category/delete/<int:id>")
 @login_required
 def delete_category(id):
-    category = Categories.query.get(id)
+    category = Categories.find_by_id(id)
     category.delete_from_db()
 
     return redirect(url_for("categories"))

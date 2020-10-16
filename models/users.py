@@ -23,7 +23,7 @@ class Users(db.Model, UserMixin):
         return f"Username {username} exists in database"
 
     @classmethod
-    def get_user(cls, username):
+    def find_by_username(cls, username):
         return Users.query.filter_by(username=username).first()
 
     def check_credentials(self, password):
