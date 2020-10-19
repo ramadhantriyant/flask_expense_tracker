@@ -20,7 +20,7 @@ class LoginForm(FlaskForm):
 
 
 class ExpenseForm(FlaskForm):
-    date = DateField("Date", validators=[DataRequired()])
+    expense_date = DateField("Date", validators=[DataRequired()])
     expense_detail = StringField("Expense Detail", validators=[DataRequired()])
     amount = IntegerField("Amount", validators=[DataRequired()])
     category_id = SelectField(

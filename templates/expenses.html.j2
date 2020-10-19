@@ -20,7 +20,7 @@
     <tbody>
       {% for expense, categories in data %}
         <tr>
-          <td>{{ expense.date }}</td>
+          <td>{{ expense.expense_date.strftime("%d %b %Y") }}</td>
           <td>{{ expense.expense_detail}}</td>
           <td>{{ expense.categories.name }}</td>
           <td>Rp{{ expense.amount }}</td>
@@ -34,6 +34,12 @@
           </td>
         </tr>
       {% endfor %}
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{{ total }}</td>
+      </tr>
     </tbody>
   </table>
 

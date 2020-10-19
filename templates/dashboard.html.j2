@@ -20,31 +20,13 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>13 September 2020</td>
-                <td>Dinner</td>
-                <td>Rp36728</td>
-              </tr>
-              <tr>
-                <td>13 September 2020</td>
-                <td>Electricity</td>
-                <td>Rp20933</td>
-              </tr>
-              <tr>
-                <td>12 September 2020</td>
-                <td>Raw eggs</td>
-                <td>Rp92460</td>
-              </tr>
-              <tr>
-                <td>12 September 2020</td>
-                <td>Curtain fix fee</td>
-                <td>Rp55000</td>
-              </tr>
-              <tr>
-                <td>12 September 2020</td>
-                <td>Lunch</td>
-                <td>Rp39660</td>
-              </tr>
+              {% for expense in data %}
+                <tr>
+                  <td>{{ expense.expense_date.strftime("%d %b %Y") }}</td>
+                  <td>{{ expense.expense_detail }}</td>
+                  <td>Rp{{ expense.amount }}</td>
+                </tr>
+              {% endfor %}
             </tbody>
           </table>
         </div>
@@ -146,94 +128,25 @@
     </div>
     <div class="col">
       <br><br>
-      <h3>Compare Expense Categories</h3>
+      <h3>Top 5 Expenses This Month</h3>
       <br>
       <div class="card">
         <div class="card-body">
-          
-        </div>
-      </div>
-    </div>
-  </div>
-<!--
-  <div class="row">
-    <div class="col">
-
-    </div>
-    <div class="col">
-      <h3>Total Expenses Last 6 Months</h3>
-      <br>
-      <div class="card">
-        <div class="card-body">
-          <canvas id="history"></canvas>
+          <canvas id="expenses"></canvas>
           <script type="text/javascript">
-            var ctx = document.getElementById('history').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['April 2020', 'May 2020', 'June 2020', 'July 2020', 'August 2020', 'September 2020'],
-                    datasets: [{
-                        label: 'Total Expenses',
-                        data: [15000000, 13890000, 12998000, 14000000, 13200000, 13800000],
-                        backgroundColor: [
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(54, 162, 235, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(54, 162, 235, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                  legend: {
-                    position: 'bottom'
-                  },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
-                    }
-                }
-            });
-          </script>
-        </div>
-      </div>
-    </div>
-  </div>
-  <br>
-  <div class="row">
-    <div class="col">
-      <h3>Top 5 Expenses Category this Month</h3>
-      <br>
-      <div class="card">
-        <div class="card-body">
-          <canvas id="categories"></canvas>
-          <script type="text/javascript">
-            var cht = document.getElementById('categories').getContext('2d');
+            var cht = document.getElementById('expenses').getContext('2d');
             var myChart = new Chart(cht, {
-                type: 'pie',
+                type: 'bar',
                 data: {
-                    labels: ['Food & Beverages', 'Utilities', 'Groceries', 'Unexpected Expenses', 'Play',],
+                    labels: ['Erhair', 'Utilities', 'Groceries', 'Unexpected Expenses', 'Play',],
                     datasets: [{
                         label: 'Category',
-                        data: [3672800, 2093300, 924600, 550000, 396600],
+                        data: [1835000, 1093300, 924600, 550000, 396600],
                         backgroundColor: [
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(162, 54, 235, 0.2)',
-                            'rgba(54, 235, 162, 0.2)',
-                            'rgba(235, 162, 54, 0.2)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(162, 54, 235, 0.8)',
+                            'rgba(54, 235, 162, 0.6)',
+                            'rgba(235, 162, 54, 0.4)',
                             'rgba(162, 235, 54, 0.2)'
                         ],
                         borderColor: [
@@ -256,9 +169,6 @@
         </div>
       </div>
     </div>
-    <div class="col">
-
-    </div>
   </div>
--->
+
 {% endblock %}

@@ -20,11 +20,16 @@ from login_manager import (
     logout_user
 )
 
+DB_HOST = ""
+DB_PORT = 5432
+DB_USER = ""
+DB_PASS = ""
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "secret_key"
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + os.path.join(basedir, "data.sqlite")
+# app.config['SQLALCHEMY_DATABASE_URI'] = f"postgres://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/druid"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 ##################
@@ -60,8 +65,10 @@ def sign_out():
 @app.route("/dashboard", methods=['GET'])
 @login_required
 def dashboard():
+    data = Expenses.last_5_expenses()
     return render_template(
-        "dashboard.html.j2"
+        "dashboard.html.j2",
+        data=data
     )
 
 
@@ -70,6 +77,7 @@ def dashboard():
 def expenses():
     # data = db.session.query(Expenses, Categories).join(Categories).all()
     data = Datas.join_expense_category()
+    # total = Expenses.sum_all()
     return render_template(
         "expenses.html.j2",
         data=data
@@ -83,12 +91,12 @@ def new_expense():
     form.category_id.choices = [(cat.id, cat.name) for cat in categories]
 
     if form.validate_on_submit() and request.method == "POST":
-        date = form.date.data
+        expense_date = form.expense_date.data
         category_id = form.category_id.data
         expense_detail = form.expense_detail.data
         amount = form.amount.data
 
-        expense = Expenses(date, category_id, expense_detail, amount)
+        expense = Expenses(expense_date, category_id, expense_detail, amount)
         expense.save_to_db()
 
         flash("New expense was addess successfully")
@@ -114,7 +122,7 @@ def edit_expense(id):
     form.category_id.choices = [(cat.id, cat.name) for cat in categories]
 
     if form.validate_on_submit() and request.method == "POST":
-        expense.date = form.date.data
+        expense.expense_date = form.expense_date.data
         expense.category_id = form.category_id.data
         expense.expense_detail = form.expense_detail.data
         expense.amount = form.amount.data
