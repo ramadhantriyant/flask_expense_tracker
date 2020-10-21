@@ -1,4 +1,5 @@
 from db import db
+from sqlalchemy import extract
 from datetime import date
 
 class Expenses(db.Model):
@@ -19,6 +20,18 @@ class Expenses(db.Model):
     def __repr__(self):
         return f"Spent {amount} for {expense_detail} in {expense_date}"
 
+    def summary(y, m):
+        expenses = Expenses.find_per_month(y, m)
+        total = 0
+
+        for expense in expenses:
+            total = total + expense.amount
+
+        return {
+            "date": date(year=y, month=m, day=1),
+            "total": total
+        }
+
     @classmethod
     def find_all(cls):
         return cls.query.all()
@@ -28,9 +41,12 @@ class Expenses(db.Model):
         return cls.query.filter_by(id=id).first()
 
     @classmethod
-    def find_this_month(cls):
-        this_month = date(year=date.today().year, month=date.today().month, day=1)
-        return cls.query.filter(cls.expense_date >= this_month)
+    def find_per_month(cls, y, m):
+        return cls.query.filter(
+            extract("year", cls.expense_date) == y
+        ).filter(
+            extract("month", cls.expense_date) == m
+        ).all()
 
     @classmethod
     def last_5_expenses(cls):

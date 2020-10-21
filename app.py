@@ -9,6 +9,7 @@ from flask import (
     request
 )
 from forms import LoginForm, ExpenseForm, CategoryForm
+from datetime import date
 from models.categories import Categories
 from models.expenses import Expenses
 from models.users import Users
@@ -216,8 +217,26 @@ def delete_category(id):
 @app.route("/history")
 @login_required
 def history():
+    total = []
+    for i in range(0, date.today().month):
+        total.append(Expenses.summary(date.today().year, date.today().month - i))
+
     return render_template(
-        "history.html.j2"
+        "history.html.j2",
+        total=total
+    )
+
+
+@app.route("/history_detail/<int:y>/<int:m>")
+@login_required
+def history_detail(y, m):
+    tgl = date(year=y, month=m, day=1)
+    data = Datas.join_expense_category_history(y, m)
+
+    return render_template(
+        "history_detail.html.j2",
+        tgl=tgl,
+        data=data
     )
 
 

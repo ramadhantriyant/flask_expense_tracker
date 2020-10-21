@@ -31,20 +31,18 @@
       </tr>
     </thead>
     <tbody>
+      {% for entry in total %}
+        <tr>
+          <td>{{ entry['date'].strftime("%b %Y") }}</td>
+          <td>Rp{{ entry['total'] }}</td>
+          <td><a href="/history_detail/{{ entry['date'].year }}/{{ entry['date'].month }}">
+            More...</a>
+          </td>
+        </tr>
+      {% endfor %}
       <tr>
-        <td>September 2020</td>
-        <td>Rp14,000,000</td>
-        <td><a href="{{ url_for('history') }}">More...</a></td>
-      </tr>
-      <tr>
-        <td>August 2020</td>
-        <td>Rp13,000,000</td>
-        <td><a href="{{ url_for('history') }}">More...</a></td>
-      </tr>
-      <tr>
-        <td>July 2020</td>
-        <td>Rp13,500,000</td>
-        <td><a href="{{ url_for('history') }}">More...</a></td>
+        <td><strong>Total for this year</strong></td>
+        <td><strong>Rp100000000</strong></td>
       </tr>
     </tbody>
   </table>

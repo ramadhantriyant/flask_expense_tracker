@@ -2,10 +2,7 @@
 
 {% block content %}
 
-  <h1>Expenses for This Month</h1>
-
-  <a href={{ url_for('new_expense') }} class="btn btn-primary active" role="button" aria-pressed="true">New Expense</a>
-
+  <h1>Expenses for {{ tgl.strftime("%b %Y") }}</h1>
 
   <table class="table">
     <thead>
@@ -14,7 +11,6 @@
         <th scope="col">Expense Detail</th>
         <th scope="col">Category</th>
         <th scope="col">Amount</th>
-        <th scope="col">Action</th>
       </tr>
     </thead>
     <tbody>
@@ -24,14 +20,6 @@
           <td>{{ expense.expense_detail}}</td>
           <td>{{ expense.categories.name }}</td>
           <td>Rp{{ expense.amount }}</td>
-          <td>
-            <a href="/expense/edit/{{ expense.id }}" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">
-              Edit
-            </a>
-            <a href="/expense/delete/{{ expense.id }}" class="btn btn-danger btn-sm active" role="button" aria-pressed="true">
-              Delete
-            </a>
-          </td>
         </tr>
       {% endfor %}
     </tbody>
