@@ -86,10 +86,10 @@
             var myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['April 2020', 'May 2020', 'June 2020', 'July 2020', 'August 2020', 'September 2020'],
+                    labels: {{ months }},
                     datasets: [{
                         label: 'Total Expenses',
-                        data: [15000000, 13890000, 12998000, 14000000, 13200000, 13800000],
+                        data: {{ total }},
                         backgroundColor: [
                             'rgba(54, 162, 235, 0.2)',
                             'rgba(54, 162, 235, 0.2)',

@@ -67,18 +67,30 @@ def sign_out():
 @login_required
 def dashboard():
     data = Expenses.last_5_expenses()
+    line_chart = Expenses.last_6_month()
+    total = []
+    months = []
+
+    for tot in line_chart:
+        total.append(tot['total'])
+    total.reverse()
+
+    for mon in line_chart:
+        months.append(mon['date'].strftime("%b %Y"))
+    months.reverse()
+
     return render_template(
         "dashboard.html.j2",
-        data=data
+        data=data,
+        months=months,
+        total=total
     )
 
 
 @app.route("/expenses")
 @login_required
 def expenses():
-    # data = db.session.query(Expenses, Categories).join(Categories).all()
     data = Datas.join_expense_category()
-    # total = Expenses.sum_all()
     return render_template(
         "expenses.html.j2",
         data=data
