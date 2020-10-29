@@ -25,12 +25,13 @@ DB_HOST = ""
 DB_PORT = 5432
 DB_USER = ""
 DB_PASS = ""
+DB_NAME = ""
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "secret_key"
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + os.path.join(basedir, "data.sqlite")
-# app.config['SQLALCHEMY_DATABASE_URI'] = f"postgres://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/druid"
+#app.config['SQLALCHEMY_DATABASE_URI'] = f"postgres://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 ##################
@@ -70,6 +71,15 @@ def dashboard():
     line_chart = Expenses.last_6_month()
     total = []
     months = []
+    sort_expenses = sorted(
+        Expenses.find_per_month(
+            date.today().year, date.today().month
+        ),
+        key=lambda x : x.amount,
+        reverse=True
+    )[0:5]
+    list_expense_detail = [x.expense_detail for x in sort_expenses]
+    list_amount = [x.amount for x in sort_expenses]
 
     for tot in line_chart:
         total.append(tot['total'])
@@ -83,7 +93,9 @@ def dashboard():
         "dashboard.html.j2",
         data=data,
         months=months,
-        total=total
+        total=total,
+        list_expense_detail=list_expense_detail,
+        list_amount=list_amount
     )
 
 

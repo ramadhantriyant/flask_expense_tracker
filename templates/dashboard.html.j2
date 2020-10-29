@@ -76,7 +76,7 @@
     </div>
     <div class="col">
       <br><br>
-      <h3>Total Expenses Trend</h3>
+      <h3>Total Expenses for the Last 6 Months</h3>
       <br>
       <div class="card">
         <div class="card-body">
@@ -136,17 +136,17 @@
           <script type="text/javascript">
             var cht = document.getElementById('expenses').getContext('2d');
             var myChart = new Chart(cht, {
-                type: 'bar',
+                type: 'doughnut',
                 data: {
-                    labels: ['Erhair', 'Utilities', 'Groceries', 'Unexpected Expenses', 'Play',],
+                    labels: {{ list_expense_detail }},
                     datasets: [{
                         label: 'Category',
-                        data: [1835000, 1093300, 924600, 550000, 396600],
+                        data: {{ list_amount }},
                         backgroundColor: [
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(162, 54, 235, 0.8)',
-                            'rgba(54, 235, 162, 0.6)',
-                            'rgba(235, 162, 54, 0.4)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(162, 54, 235, 0.2)',
+                            'rgba(54, 235, 162, 0.2)',
+                            'rgba(235, 162, 54, 0.2)',
                             'rgba(162, 235, 54, 0.2)'
                         ],
                         borderColor: [
