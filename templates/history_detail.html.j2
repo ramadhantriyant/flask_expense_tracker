@@ -2,6 +2,7 @@
 
 {% block content %}
 
+  <a class="btn btn-outline-info btn-sm" href="{{ url_for('history') }}" role="button">← Back</a>
   <h1>Expenses for {{ tgl.strftime("%b %Y") }}</h1>
 
   <table class="table">

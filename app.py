@@ -64,6 +64,7 @@ def sign_out():
     logout_user()
     return redirect(url_for("index_page"))
 
+
 @app.route("/dashboard", methods=['GET'])
 @login_required
 def dashboard():
@@ -107,6 +108,7 @@ def expenses():
         "expenses.html.j2",
         data=data
     )
+
 
 @app.route("/new_expense", methods=['GET', 'POST'])
 @login_required
@@ -242,12 +244,41 @@ def delete_category(id):
 @login_required
 def history():
     total = []
-    for i in range(0, date.today().month):
-        total.append(Expenses.summary(date.today().year, date.today().month - i))
+    year_total = 0
+    list_year = sorted([year for year in range(2019, date.today().year + 1)], reverse=True)
+
+    try:
+        search_year = int(request.args.get("year"))
+    except:
+        search_year = date.today().year
+
+    if not search_year:
+        search_year = date.today().year
+
+    if search_year == date.today().year:
+        for i in range(0, date.today().month):
+            data_dict = Expenses.summary(search_year, date.today().month - i)
+            total.append(data_dict)
+            year_total = year_total + data_dict['total']
+    elif search_year < date.today().year:
+        for i in range(0, 12):
+            data_dict = Expenses.summary(search_year, 12 - i)
+            total.append(data_dict)
+            year_total = year_total + data_dict['total']
+    else:
+        flash("Year is in the future!")
+        search_year = date.today().year
+        for i in range(0, date.today().month):
+            data_dict = Expenses.summary(search_year, date.today().month - i)
+            total.append(data_dict)
+            year_total = year_total + data_dict['total']
 
     return render_template(
         "history.html.j2",
-        total=total
+        total=total,
+        search_year=search_year,
+        list_year=list_year,
+        year_total=year_total
     )
 
 
