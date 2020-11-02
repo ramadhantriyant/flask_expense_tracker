@@ -84,11 +84,9 @@ def dashboard():
 
     for tot in line_chart:
         total.append(tot['total'])
-    total.reverse()
 
     for mon in line_chart:
         months.append(mon['date'].strftime("%b %Y"))
-    months.reverse()
 
     return render_template(
         "dashboard.html.j2",

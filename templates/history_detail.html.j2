@@ -2,7 +2,7 @@
 
 {% block content %}
 
-  <a class="btn btn-outline-info btn-sm" href="{{ url_for('history') }}" role="button">← Back</a>
+  <a class="btn btn-outline-primary btn-sm" href="{{ url_for('history') }}" role="button">← Back</a>
   <h1>Expenses for {{ tgl.strftime("%b %Y") }}</h1>
 
   <table class="table">
@@ -20,7 +20,7 @@
           <td>{{ expense.expense_date.strftime("%d %b %Y") }}</td>
           <td>{{ expense.expense_detail}}</td>
           <td>{{ expense.categories.name }}</td>
-          <td>Rp{{ expense.amount }}</td>
+          <td>Rp{{ "{:,.0f}".format(expense.amount) }}</td>
         </tr>
       {% endfor %}
     </tbody>

@@ -40,7 +40,7 @@
       {% for entry in total %}
         <tr>
           <td>{{ entry['date'].strftime("%b %Y") }}</td>
-          <td>Rp{{ entry['total'] }}</td>
+          <td>Rp{{ "{:,.0f}".format(entry['total']) }}</td>
           <td><a href="/history_detail/{{ entry['date'].year }}/{{ entry['date'].month }}">
             More...</a>
           </td>
@@ -48,7 +48,7 @@
       {% endfor %}
       <tr>
         <td><strong>Total for this year</strong></td>
-        <td><strong>Rp{{ year_total }}</strong></td>
+        <td><strong>Rp{{ "{:,.0f}".format(year_total) }}</strong></td>
         <td></td>
       </tr>
     </tbody>

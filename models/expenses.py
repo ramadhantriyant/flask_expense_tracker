@@ -1,6 +1,6 @@
 from db import db
 from sqlalchemy import extract
-from datetime import date, timedelta
+from datetime import date
 
 class Expenses(db.Model):
     __tablename__ = "expenses"
@@ -34,10 +34,23 @@ class Expenses(db.Model):
 
     def last_6_month():
         data = []
-        for i in range(0, 180, 30):
-            the_date = date.today() - timedelta(days=i)
-            data.append(Expenses.summary(the_date.year, the_date.month))
+        this_month = date.today().month
+        this_year = date.today().year
+        six_month_ago = this_month - 5
 
+        if six_month_ago <= 0:
+            six_month_ago = six_month_ago + 12
+            last_year = this_year - 1
+
+            for i in range(six_month_ago, 13):
+                data.append(Expenses.summary(last_year, i))
+
+            for i in range(1, this_month + 1):
+                data.append(Expenses.summary(this_year, i))
+
+        else:
+            for i in range(six_month_ago, this_month + 1):
+                data.append(Expenses.summary(this_year, i))
         return data
 
     @classmethod
