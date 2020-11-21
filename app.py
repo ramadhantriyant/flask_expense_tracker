@@ -21,17 +21,10 @@ from login_manager import (
     logout_user
 )
 
-DB_HOST = ""
-DB_PORT = 5432
-DB_USER = ""
-DB_PASS = ""
-DB_NAME = ""
-basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "secret_key"
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + os.path.join(basedir, "data.sqlite")
-#app.config['SQLALCHEMY_DATABASE_URI'] = f"postgres://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "sqlite:///data.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 ##################

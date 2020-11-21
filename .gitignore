@@ -5,3 +5,4 @@ __pycache__/
 
 setupdb.py
 *.sqlite
+*.zip
