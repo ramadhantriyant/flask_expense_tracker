@@ -36,3 +36,9 @@ class Datas():
         ).filter(
             Expenses.expense_date <= end_date
         )
+
+    def top_expense_category(y, m):
+        start_date = date(year=y, month=m, day=1)
+        end_date = date.today()
+
+        return None
