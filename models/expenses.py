@@ -18,7 +18,7 @@ class Expenses(db.Model):
         self.amount = amount
 
     def __repr__(self):
-        return f"Spent {amount} for {expense_detail} in {expense_date}"
+        return f"Spent {self.amount} for {self.expense_detail} in {self.expense_date}"
 
     def summary(y, m):
         expenses = Expenses.find_per_month(y, m)

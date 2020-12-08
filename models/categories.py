@@ -9,6 +9,9 @@ class Categories(db.Model):
     description = db.Column(db.Text)
     expense = db.relationship("Expenses", backref="categories", lazy="dynamic")
 
+    def __repr__(self):
+        return f"{self.name} is for {self.description}"
+
     def __init__(self, name, description):
         self.name = name
         self.description = description

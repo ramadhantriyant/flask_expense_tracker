@@ -113,13 +113,13 @@
                   legend: {
                     position: 'bottom'
                   },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
-                    }
+                  scales: {
+                    yAxes: [{
+                      ticks: {
+                        beginAtZero: true
+                      }
+                    }]
+                  }
                 }
             });
           </script>
@@ -136,7 +136,7 @@
           <script type="text/javascript">
             var cht = document.getElementById('expenses').getContext('2d');
             var myChart = new Chart(cht, {
-                type: 'pie',
+                type: 'bar',
                 data: {
                     labels: {{ list_expense_detail }},
                     datasets: [{
@@ -162,6 +162,13 @@
                 options: {
                   legend: {
                     position: 'bottom'
+                  },
+                  scales: {
+                    yAxes: [{
+                      ticks: {
+                        beginAtZero: true
+                      }
+                    }]
                   }
                 }
             });

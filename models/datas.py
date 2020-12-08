@@ -19,6 +19,7 @@ class Datas():
             Expenses.id.desc()
         ).filter(Expenses.expense_date >= this_month)
 
+
     def join_expense_category_history(y, m):
         start_date = date(year=y, month=m, day=1)
         end_date = date(
@@ -37,8 +38,23 @@ class Datas():
             Expenses.expense_date <= end_date
         )
 
-    def top_expense_category(y, m):
-        start_date = date(year=y, month=m, day=1)
-        end_date = date.today()
 
-        return None
+    def top_expense_category(y, m):
+        this_month = date(
+            year=date.today().year,
+            month=date.today().month,
+            day=1
+        )
+
+        explist = []
+
+        categories = Categories.find_all()
+        expenses = Expenses.find_all()
+
+        for category in categories:
+            explist.append({
+                "category_id": category.id,
+                "sum": Expenses.amount
+            })
+
+        return expense

@@ -61,6 +61,8 @@ def sign_out():
 @app.route("/dashboard", methods=['GET'])
 @login_required
 def dashboard():
+    top = Datas.top_expense_category(date.today().year, date.today().month)
+    print(top)
     data = Expenses.last_5_expenses()
     line_chart = Expenses.last_6_month()
     total = []
@@ -117,7 +119,7 @@ def new_expense():
         expense = Expenses(expense_date, category_id, expense_detail, amount)
         expense.save_to_db()
 
-        flash("New expense was addess successfully")
+        flash("New expense was added successfully")
 
         return redirect(url_for("new_expense"))
 
