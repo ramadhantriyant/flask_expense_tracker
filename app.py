@@ -302,8 +302,9 @@ if __name__ == "__main__":
 
     @app.before_first_request
     def create_tables():
+        # Users('admin', 'password').save_to_db()
         db.create_all()
 
     login_manager.init_app(app)
     login_manager.login_view = "index_page"
-    app.run(port=80, debug=True)
+    app.run(debug=True)
